@@ -7,9 +7,9 @@ output: html_document
 
 Graphical representations of your data can help to see structures and depict comparisons. There are many ways to visualise data and R comes with quite powerful and versatile tools to create all kinds of plots. 
 
-Base R (meaning R without any additional packages installed) already has some functions to plot graphics from data, but these functions are very rudimentary and are not nice to work with. Luckily, there is a package called ggplot2, which unifies many different types of visualisations under one umbrella, using consistent syntax. Here we will only scratch the surface but I highly recommend that you familiarise yourself more with it. This is a long but very good video that explains the principles of ggplot2: https://www.youtube.com/live/h29g21z0a68?si=DdodJAcWyM0EwCI8.
+Base R (meaning R without any additional packages installed) already has some functions to plot graphics from data, but these functions are very rudimentary and are not nice to work with. Luckily, there is a package called `ggplot2`, which unifies many different types of visualisations under one umbrella, using consistent syntax. Here we will only scratch the surface but I highly recommend that you familiarise yourself more with it. This is a long but very good video that explains the principles of `ggplot2`: https://www.youtube.com/live/h29g21z0a68?si=DdodJAcWyM0EwCI8.
 
-We could install and load ggplot2 separately, but you all should have tidyverse installed, which is a collection of several packages. ggplot2 is one of them, and so are some others that we will use in this exercise. So all we need to do is to load tidyverse and we will have access to all these helpful functions, including ggplot2. For more info on tidyverse and its contained packages (including useful cheat sheets), see: https://www.tidyverse.org/
+We could install and load `ggplot2` separately, but you all should have `tidyverse` installed, which is a collection of several packages. `ggplot2` is one of them, and so are some others that we will use in this exercise. So all we need to do is to load `tidyverse` and we will have access to all these helpful functions, including `ggplot2.` For more info on `tidyverse` and its contained packages (including useful cheat sheets), see: https://www.tidyverse.org/
 
 ```{r}
 library(tidyverse)
@@ -29,20 +29,21 @@ bimodal_dist = data.frame(value=c(rnorm(100/2, mean = 2, sd = 0.5), rnorm(100/2,
 
 How exactly you want to visualise your data depends on the data itself and the the properties you wish to highlight. The visualisations we will be looking at in this exercise are
 
-- Scatter plots
+- Scatter plots. Draw points from pairs of values on an x-y plane. Good to see potential correlations.
 - Bar plots. Good to compare single values in different categories (e.g. counts).
 - (Stacked bar plots. Good to compare ratios inside categories.)
 - Box plots. Good to visualise distributions of values.
 - Histograms. Another way to visualise a distribution.
-- Density plots.
+- Density plots. Yet another way to visualise distributions.
 - Violin plots. Somewhat a way to combine a box plot with a histogram.
 
 ## 4.1 Load in the dataset and explore it a bit
 
-For this exercise we will be using a the iris dataset, that is included in R.
+For this exercise we will be using a the iris dataset, which is included in R.
 ```{r}
 # Load an R-internal dataset and create a dataframe called iris.
 data(iris)
+#iris
 
 # Look at the structure of the dataframe:
 str(iris)
@@ -67,9 +68,50 @@ iris %>% # Note to self: Introduce the pipe
             )
 ```
 
-## 4.2 Bar plots
-### 4.2.1 Simple bar plots
-Let's visualise these means by using a bar plot.
+## 4.2 Scatter plots
+Maybe the simplest type of plots is a scatter plot. Given pairs of values, it will draw them as points on a plane.
+```{r}
+# Let's filter down the iris dataset to only include the virginica species.
+only_virginica = iris %>%
+  filter(Species=="virginica")
+
+ggplot(only_virginica, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point() + # Note to self: remove later
+  geom_smooth() + # Note to self: add and remove later
+  geom_line() # Note to self: add later
+```
+You should now see a plot appearing in the bottom-right corner of RStudio. You can resize that window or click on Zoom to open a new window that only contains this plot. You can save the plot to a file by clicking on Export. 
+
+It's also possible to store a plot into a variable
+```{r}
+p = ggplot(only_virginica, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point()
+
+# To visualise the plot again, simply call the variable:
+p
+```
+
+If you have stored the plot in a variable, you can also save it using the function `ggsave()`:
+```{r}
+# You will have to adjust the filename point to a folder on your computer.
+ggsave(filename="~/PhD/Teaching/example_plot.pdf", plot=p, width=7, height=5)
+```
+
+**Task: Make a scatter plot that shows the sepal length of Iris versicolor on the x axiis and its sepal width on the y axis.**
+
+```{r}
+# Solution:
+only_versicolor = iris %>%
+  filter(Species=="versicolor")
+
+ggplot(only_versicolor, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point()
+```
+
+
+## 4.3 Bar plots
+### 4.3.1 Simple bar plots
+Let's visualise the means from earlier by using a bar plot.
 ```{r}
 mean_flower_sizes = iris %>%
   group_by(Species) %>%
@@ -79,18 +121,12 @@ mean_flower_sizes = iris %>%
             mean_petal_width = mean(Petal.Width)
             )
 
+# Let's fitler mean_flower_sizes down further to only include the mean sepal length
 m_sep_len = mean_flower_sizes %>%
     select(c(Species, mean_sepal_length))
 
 ggplot(m_sep_len, aes(x=Species, y=mean_sepal_length, fill=Species)) + # Note to self: Add fill later
   geom_col()
-
-# It's also possible to store the plot in a variable:
-p = ggplot(m_sep_len, aes(x=Species, y=mean_sepal_length, fill=Species)) +
-  geom_col()
-
-# To visualise the plot again, simply call the variable:
-p
 
 # Pie chart
 # ggplot(mean_sepal_length, aes(x='', y=mean_sepal_length, fill=Species)) +
@@ -100,13 +136,7 @@ p
 #   geom_text(aes(label = mean_sepal_length), position = position_stack(vjust=0.5))
 ```
 
-You should now see a plot appearing in the bottom-right corner or RStudio. You can resize that window or click on Zoom to open a new window that only contains this plot. You can save the plot to a file by clicking on Export. If you have stored the plot in a variable, you can also save it using the function ggsave():
-```{r}
-# You will have to adjust the filename point to a folder on your computer.
-ggsave(filename="~/PhD/Teaching/example_plot.pdf", plot=p, width=7, height=5)
-```
-
-### 4.2.1 Grouped bar plots
+### 4.3.2 Grouped bar plots
 
 Some features of ggplot work best if the data is in a long (or so-called tidy) format, so we will have to pivot the table.
 ```{r}
@@ -139,7 +169,7 @@ mean_flower_sizes %>%
   geom_col(position='dodge')
 ```
 
-## 4.3 Box plots
+## 4.4 Box plots
 So far we have visualised mean values. That's nice but we lose the information about how the data were distributed. This is where box plots come in handy. 
 
 ```{r}
@@ -180,11 +210,11 @@ tidy_iris %>%
   geom_boxplot()
 ```
 
-## 4.4 Histograms
+## 4.5 Histograms
 Histograms can give you a more detailed impression of a distribution.
 ```{r}
 iris %>%
-  filter(Species=="setosa") %>% # Note to self: add later 
+  filter(Species=="setosa") %>% 
   select(Sepal.Length) %>%
   ggplot(aes(x=Sepal.Length)) +
   geom_histogram(binwidth = 0.1) # Add binwidth later to explain histograms.
@@ -200,20 +230,19 @@ iris %>%
   geom_histogram(binwidth = 0.08, position="identity", alpha=0.8) # Note to self: Add alpha and identity later. Explain it.
 ```
 
-## 4.5 Density plots
+## 4.6 Density plots
 
-Density plots have a similar purpose to histograms. But instead of bars representing bins, a density plot will draw a smooth curve. Let's create one and discuss what we are seeing. To make a density plot, you can use the exact same input as for the histogram, but add a different geometry.
+Density plots have a similar purpose as histograms. But instead of bars representing bins, a density plot will draw a smooth curve. Let's create one and discuss what we are seeing. To make a density plot, you can use the exact same input as for the histogram, but add a different geometry.
 
 ```{r}
 iris %>%
   ggplot(aes(x=Petal.Length, fill=Species)) +
-  geom_density(alpha=0.5)
+  geom_density(alpha=0.5) # Note to self: Add alpha later
 ```
-If you understand a histogram you will have an intuitive understanding of what a density plot is. To be more precise about what is happening, imagine all the Petal.Length values lined up on the x axis. Then a curve into the y axis is drawn around each data point. The density plot is then made by adding up all the curves. Areas where many datapoints are close to each other will have more to add and therefore reach higher on the y axis, while areas with low density will be lower on the y axis.
+If you understand a histogram you will have an intuitive understanding of what a density plot is. To be more precise about what is happening, imagine all the Petal.Length values lined up on the x axis. Then a curve is drawn around each data point. The density plot is then made by adding up all the curves. Areas where many datapoints are close to each other will have more to add and therefore reach higher on the y axis, while areas with low density will be lower on the y axis.
 **Note that, unlike with histograms, the y axis in a density plot does not represent count data anymore.**
 
-You can also add different geometries into the same plot. So if you wanted, you could plot a histogram and a density plot together.
-
+As we have seen with the scatter plots, you can also add different geometries into the same plot. So if you wanted, you could plot a histogram and a density plot together.
 ```{r}
 iris %>%
   ggplot(aes(x=Petal.Length, fill=Species)) +
@@ -221,16 +250,16 @@ iris %>%
   geom_density(alpha=0.5)
 ```
 
-## 4.6 Violin plots
+## 4.7 Violin plots
 
-Now that you know what a box plot and a density plot is, you can also easily understand violin plots. They are essentially a combination of both! For a violin plot, you can use the same input as for a box plot and simply change the geometry.
+Now that you know what a box plot and a density plot is, you can easily understand violin plots. They are essentially a combination of both! For a violin plot, you can use the same input as for a box plot and simply change the geometry.
 
 ```{r}
 ggplot(tidy_iris, aes(x=name, y=value, fill=Species)) +
   geom_violin() 
 ```
 
-This plot is a bit unclear. The violins are very slim and it's hard to see what's going on. So let me show you another feature of ggplot, by which you can arrange different groups of your plots in so-called facets. Simply add `facet_wrap()` to your plot and tell it by which column of your data the plot should be divided.
+This plot is a bit unclear. The violins are very slim and it's hard to see what's going on. So let me show you another feature of `ggplot2`, by which you can arrange different groups of your plots in so-called facets. Simply add `facet_wrap()` to your plot and tell it by which column of your data the plot should be divided.
 ```{r}
 ggplot(tidy_iris, aes(x=name, y=value, fill=Species)) +
   geom_violin() + 
@@ -239,49 +268,76 @@ ggplot(tidy_iris, aes(x=name, y=value, fill=Species)) +
 
 As you can see, a violin plot resembles a box plot but now, the width of the violin has a meaning. It is essentially a density plot drawn inside each box. In fact, it's the same density plot drawn symmetrically to the left and right, resulting in this violin-like shape. Also, violin plots typically don't have whiskers or seperatly drawn outliers.
 
-## 4.7 Practice!
-
-Pick any of the following tasks. If there is more time, pick another one. 
+## 4.8 Practice!
 
 ```{r}
 data(PlantGrowth)
 View(PlantGrowth)
 # Results from an experiment to compare yields (as measured by dried weight of plants) obtained under a control and two different treatment conditions.
+
+PlantGrowth_wide = PlantGrowth %>%
+  mutate(measurement = rep(c(1:10),3)) %>%
+  pivot_wider(names_from = group, values_from = weight)
 ```
 
+Pick any of the following tasks. If there is more time, pick another one. 
+
+### 4.8.1 Scatter plot 
+Show the weight for treatment 1 on the x axis and the weight for treatment 2 on the y axis (hint: you will need to use the PlantGrowth_wide table that we made)
 ```{r}
-# Barpot of median plant growth for the different treatments and the control:
+# Solution:
+PlantGrowth_wide %>%
+  ggplot(aes(x=trt1, y=trt2)) +
+  geom_point() +
+  ggtitle("4.8.1 - Scatter plot")
+```
+
+### 4.8.2 Barpot 
+Plot the median plant growth for the different treatments and the control
+
+```{r}
+# Solution:
 PlantGrowth %>%
   group_by(group) %>%
   summarise(median_growth = median(weight)) %>%
   ggplot(aes(x=group, y=median_growth)) +
-  geom_col()
+  geom_col() +
+  ggtitle("4.8.2 - Barplot")
 ```
-
+### 4.8.3 Boxplot
+Plot plant growth for the different treatments and the control.
 ```{r}
-# Boxplot of plant growth for the different treatments and the control:
+# Solution
 PlantGrowth %>%
   ggplot(aes(x=group, y=weight)) +
-  geom_boxplot()
+  geom_boxplot() + 
+  ggtitle("4.8.3 - Boxplot")
 ```
-
+### 4.8.4 Histogram
+Plot the plant growth for the different treatments and the control (set the binwidth to 0.15).
 ```{r}
-# Histogram of plant growth for the different treatments and the control (set the binwidth to 0.15):
+# Solution:
 PlantGrowth %>%
   ggplot(aes(x=weight, fill=group)) +
-  geom_histogram(position="identity", alpha=0.8, binwidth = 0.15)
+  geom_histogram(position="identity", alpha=0.8, binwidth = 0.15) +
+  ggtitle("4.8.4 - Histogram")
 ```
+### 4.8.5 Density plot
+Plot the plant growth for the different treatments and the control (set color instead of fill and don't set an alpha):
 ```{r}
-# Density plot of plant growth for the different treatments and the control (set color instead of fill and don't set an alpha):
+# Solution:
 PlantGrowth %>%
   ggplot(aes(x=weight, color=group)) +
-  geom_density()
+  geom_density() +
+  ggtitle("4.8.5 - Density plot")
 ```
+### 4.8.6 Violin plot
+Plot the plant growth for the different treatments and the control (add all quartiles, no facet needed, add a `geom_point()`!)
 ```{r}
-# Violin plot of plant growth for the different treatments and the control (add all quartiles, no facet needed, add a geom_point!)
 PlantGrowth %>%
   ggplot(aes(x=group, y=weight)) +
   geom_violin(draw_quantiles=c(0.25,0.5,0.75)) +
-  geom_point()
+  geom_point() +
+  ggtitle("4.8.6 - Violin plot")
 ```
 
