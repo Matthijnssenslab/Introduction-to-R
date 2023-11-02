@@ -1,0 +1,78 @@
+---
+title: "R Tutorial - Documentation"
+output: html_document
+---
+#Getworking directory 
+getwd()
+#For this execrise set desktop as working directory 
+setwd("~/Desktop")
+
+#'*Installing and loading packages*
+#NB:Packages are installed once but loading every session
+#YOU CLICK "Packages", "Install" and type the name of the packages
+## install.packages("name_of_package")
+install.packages("tidyverse")
+library ("tidyverse") 
+#To check which folder R installed packages
+.libPaths()
+
+#Exercise 1
+#Insatll and load the following packages
+"ggplot2" 
+"dplyr" 
+"tidyr"
+
+#Installing Bioconductor (packages)
+#BiocManager::install("name_of_package")
+BiocManager::install("ComplexHeatmap")
+library ("ComplexHeatmap")
+
+#'*Help*
+#For commands
+#help(command) OR ?(command)
+help(sum)
+?sum
+example(sum)
+#For packages 
+help(package="ggplot2")
+browseVignettes("ggplot2")
+
+#'*Basic syntax in R"*
+#Text should be inside quotes (single or double)
+"Hello" 
+"say \"Hello\""
+
+#'*Arithmetic operators* 
+#Addition (+)
+3 + 5
+#Subtraction (-)
+10 - 3
+#Multiplication (() OR *)
+4 * 6
+#Division (/)
+15 / 3
+
+#Exponentiation (^ OR **)
+2^3
+2**3
+
+#Modulo (%)
+10 %% 3
+
+#R follows the standard order of operations (PEMDAS/BODMAS)
+3+4*(2**2)-12/3
+#=The above equation is the same as;
+(2**2)*4-(12/3)+3
+
+
+#'*Arithmetic operators* 
+#AND (& or &&)
+(9 > 5) & (2 < 10)
+
+#OR (| or ||)
+(2+3 == 5) | (5+5 == 10)
+
+#NOT (!)
+!(10 > 30)
+
+
