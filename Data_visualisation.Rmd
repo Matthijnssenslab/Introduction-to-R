@@ -18,10 +18,10 @@ library(tidyverse)
 ```{r}
 # note to self: Define these now for demonstration purposes later.
 set.seed(6)
-log_norm_dist = data.frame(value=rlnorm(100, 15, 1)) %>%
+log_norm_dist <- data.frame(value=rlnorm(100, 15, 1)) %>%
   ggplot(aes(value)) +
   geom_histogram()
-bimodal_dist = data.frame(value=c(rnorm(100/2, mean = 2, sd = 0.5), rnorm(100/2, mean = 8, sd = 1))) %>%
+bimodal_dist <- data.frame(value=c(rnorm(100/2, mean = 2, sd = 0.5), rnorm(100/2, mean = 8, sd = 1))) %>%
   ggplot(aes(value)) +
   geom_histogram()
 ```

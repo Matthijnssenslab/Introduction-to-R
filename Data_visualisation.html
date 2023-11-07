@@ -388,10 +388,10 @@ cheat sheets), see: <a href="https://www.tidyverse.org/" class="uri">https://www
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code># note to self: Define these now for demonstration purposes later.
 set.seed(6)
-log_norm_dist = data.frame(value=rlnorm(100, 15, 1)) %&gt;%
+log_norm_dist &lt;- data.frame(value=rlnorm(100, 15, 1)) %&gt;%
   ggplot(aes(value)) +
   geom_histogram()
-bimodal_dist = data.frame(value=c(rnorm(100/2, mean = 2, sd = 0.5), rnorm(100/2, mean = 8, sd = 1))) %&gt;%
+bimodal_dist &lt;- data.frame(value=c(rnorm(100/2, mean = 2, sd = 0.5), rnorm(100/2, mean = 8, sd = 1))) %&gt;%
   ggplot(aes(value)) +
   geom_histogram()</code></pre>
 <p>How exactly you want to visualise your data depends on the data
