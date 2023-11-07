@@ -1,0 +1,323 @@
+---
+title: "R Intro-Descriptive statistics"
+output: html_descriptive_statistics
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you
+execute code within the notebook, the results appear beneath the code.
+
+Try executing this chunk by clicking the *Run* button within the chunk
+or by placing your cursor inside it and pressing *Cmd+Shift+Enter*.
+
+```{r}
+
+```
+
+Store the data in the variable my_data
+
+```{r}
+install.packages("modeest")
+install.packages("dplyr")
+install.packages("pastecs")
+
+
+library(modeest)
+library(pastecs)
+library(dplyr)
+```
+
+Basic view options
+
+Store the data in the variable my_data
+
+```{r}
+my_data <- iris
+```
+
+Print the first 6 rows or view all of it.
+
+```{r}
+head(my_data, 6)
+
+View(my_data)
+```
+
+######Computing mean, median and mode, measures of central
+tendency######
+
+Compute the mean value for sepal length
+
+```{r}
+mean(my_data$Sepal.Length)
+```
+
+Compute the median value
+
+```{r}
+median(my_data$Sepal.Length)
+```
+
+Compute the mode, using modeest: mfv!
+
+```{r}
+modeest::mfv(my_data$Sepal.Length)
+```
+
+######Measures of variability#######
+
+Range: minimum & maximum: Range corresponds to biggest value minus the
+smallest value. It gives you the full spread of the data.
+
+Compute the minimum value
+
+```{r}
+min(my_data$Sepal.Length)
+```
+
+Compute the maximum value
+
+```{r}
+max(my_data$Sepal.Length)
+```
+
+Range
+
+```{r}
+range(my_data$Sepal.Length)
+```
+
+#Quartiles and quantiles Recall that, quartiles divide the data into 4
+parts. Note that, the interquartile range (IQR) - corresponding to the
+difference between the first and third quartiles - is sometimes used as
+a robust alternative to the standard deviation. R function:
+
+quantile(x, probs = seq(0, 1, 0.25))
+
+x: numeric vector whose sample quantiles are wanted. probs: numeric
+vector of probabilities with values in [0,1].
+
+by default, you will get quartiles
+
+```{r}
+quantile(my_data$Sepal.Length)
+```
+
+lets compute deciles (0.1, 0.2, 0.3... 0,9)
+
+```{r}
+quantile(my_data$Sepal.Length, seq(0, 1, 0.1))
+```
+
+#To compute the interquartile (IQR) range: IQR means="midspread, middle
+50%"
+
+```{r}
+IQR(my_data$Sepal.Length)
+```
+
+#Variance and standard deviation The variance represents the average
+squared deviation from the mean. The standard deviation is the square
+root of the variance. It measures the average deviation of the values,
+in the data, from the mean value.
+
+Compute the variance
+
+```{r}
+var(my_data$Sepal.Length)
+```
+
+Compute the standard deviation
+
+```{r}
+sd(my_data$Sepal.Length)
+```
+
+Median absolute deviation The median absolute deviation (MAD) measures
+the deviation of the values, in the data, from the median value.
+
+Compute the median
+
+```{r}
+median(my_data$Sepal.Length)
+```
+
+Compute the median absolute deviation
+
+```{r}
+mad(my_data$Sepal.Length)
+```
+
+######Computing an overall summary of a variable and an entire data
+frame######
+
+summary() function = Can be used for overall summary of dataframe or a
+variable
+
+Summary of a single variable.
+
+```{r}
+summary(my_data$Sepal.Length)
+```
+
+Summary of a data frame. Previous function is applied to each column.
+Depending on the data in each column, result will differ.
+
+If the column is a numeric variable, mean, median, min, max and
+quartiles are returned. If the column is a factor variable, the number
+of observations in each group is returned.
+
+Let's use it:
+
+```{r}
+summary(my_data)
+```
+
+If you do not want to see 3 digits after dot (lets limit it to one
+digit):
+
+```{r}
+summary(my_data, digits = 1)
+```
+
+######sapply and apply functions for calculations######
+
+It's also possible to use the function sapply() to apply a particular
+function over a list or vector. For instance, we can use it, to compute
+for each column in a data frame, the mean, sd, var, min, quantile, ...
+
+Compute the mean of each column
+
+```{r}
+sapply(my_data[, -5], mean)
+```
+
+what is "[, -5]"? : It means drop the fifth column while doing the
+calculation. Why? Because it is not numeric, function cannot calculate
+that.
+
+Compute quartiles
+
+```{r}
+sapply(my_data[, -5], quantile)
+```
+
+We can also use apply(), However, we will need to specify if we want to work with columns or rows. We'll start with the main function
+of the apply group: apply(). It takes a DataFrame, a matrix, or a
+multi-dimensional array as input and, depending on the input object type
+and the function passed in, outputs a vector, a list, a matrix, or an
+array.
+
+The syntax of the apply() function is very simple and has only three
+parameters:
+
+apply(X, MARGIN, FUN)
+
+X=dataframe MARGIN=(it can take values 1, 2, or c(1,2), meaning that the
+function is applied row-wise, column-wise, or both row- and column-wise,
+correspondingly) FUN=function
+
+```{r}
+apply(my_data[,-5], 2, median)
+
+```
+
+#Pipe (%>%) Operator
+
+The %>% symbol in R is called the pipe operator, and it comes from the magrittr package, which is also imported by the dplyr package. It is used to pass the result of one expression as the first argument to the next expression. This can make your code more readable and reduces the need for nested function calls.
+
+
+```{r}
+summarize(
+  filter(iris, Species == 'setosa'),
+  mean_sepal_length = mean(Sepal.Length),
+  mean_sepal_width = mean(Sepal.Width)
+)
+
+```
+
+```{r}
+library(dplyr)
+
+iris %>%
+  filter(Species == 'setosa') %>%
+  summarize(
+    mean_sepal_length = mean(Sepal.Length),
+    mean_sepal_width = mean(Sepal.Width)
+  )
+
+```
+
+#Descriptive statistics by groups######
+
+We want to group the data by Species (using group_by) and then:
+compute the number of element in each group. R function: n()
+compute the mean: R function mean() and the standard deviation: R function sd()
+dont forget to ignore NA values for calculation functions mean and sd
+
+#lets use group_by, which takes our data, and groups it by species. Then, we use summarize()
+
+Quest: group_by Species, 
+```{r}
+group_by(my_data, Species) %>% 
+  summarise(
+    count = n(), 
+    mean = mean(Sepal.Length, na.rm = TRUE),
+    standarddeviation = sd(Sepal.Length, na.rm = TRUE)
+)
+```
+
+We can make it a new variable, so we can manipulate if needed...
+```{r}
+
+sepal_length_table <- group_by(my_data, Species) %>% 
+  summarise(
+    count = n(), 
+    mean = mean(Sepal.Length, na.rm = TRUE),
+    standarddeviation = sd(Sepal.Length, na.rm = TRUE),
+    median = median(Petal.Length, na.rm = TRUE)
+  )
+
+```
+
+
+The result of this pipeline will be a new data frame where each row corresponds to a unique Species in the original my_data. Each row will have the count of observations, the mean of Sepal.Length, and the standard deviation of Sepal.Length for that Species. This type of summary is particularly useful for understanding the distribution of measurements within categories of a categorical variable.
+
+#let's try a new dataset. 
+```{r}
+data("ToothGrowth")
+head(ToothGrowth)
+View(ToothGrowth)
+```
+
+len: Tooth length
+supp: Supplement type (VC or OJ).two delivery methods, (orange juice or ascorbic acid (a form of vitamin C and coded as VC).
+dose: numeric Dose in milligrams/day
+
+Can you group this dataset by dose and calculate mean, count and standard deviation for each group?
+```{r}
+group_by(ToothGrowth, dose) %>%
+  summarise(
+    count = n(),
+    mean = mean(len, na.rm = TRUE),
+    stdev = sd(len, na.rm = TRUE),
+  )
+
+```
+
+
+Can you group this dataset by supp and calculate mean, count, standard deviation, median, min and max?
+```{r}
+group_by(ToothGrowth, supp) %>%
+  summarise(
+    count = n(),
+    mean = mean(len, na.rm = TRUE),
+    stdev = sd(len, na.rm = TRUE),
+    median = median(len, na.rm =TRUE),
+    min = min(len),
+    max = max(len),
+  )
+```
+
