@@ -80,11 +80,12 @@ ggplot(only_virginica, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_smooth() + # Note to self: add and remove later
   geom_line() # Note to self: add later
 ```
+
 You should now see a plot appearing in the bottom-right corner of RStudio. You can resize that window or click on Zoom to open a new window that only contains this plot. You can save the plot to a file by clicking on Export. 
 
 It's also possible to store a plot into a variable
 ```{r}
-p = ggplot(only_virginica, aes(x=Sepal.Length, y=Sepal.Width)) +
+p <- ggplot(only_virginica, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point()
 
 # To visualise the plot again, simply call the variable:
@@ -97,14 +98,14 @@ If you have stored the plot in a variable, you can also save it using the functi
 ggsave(filename="~/PhD/Teaching/example_plot.pdf", plot=p, width=7, height=5)
 ```
 
-**Task: Make a scatter plot that shows the sepal length of Iris versicolor on the x axiis and its sepal width on the y axis.**
+**Task: Make a scatter plot that shows the sepal length of Iris versicolor on the x axiis and its petal length on the y axis.**
 
 ```{r}
 # Solution:
-only_versicolor = iris %>%
+only_versicolor <- iris %>%
   filter(Species=="versicolor")
 
-ggplot(only_versicolor, aes(x=Sepal.Length, y=Sepal.Width)) +
+ggplot(only_versicolor, aes(x=Sepal.Length, y=Petal.Length)) +
   geom_point()
 ```
 
@@ -113,7 +114,7 @@ ggplot(only_versicolor, aes(x=Sepal.Length, y=Sepal.Width)) +
 ### 4.3.1 Simple bar plots
 Let's visualise the means from earlier by using a bar plot.
 ```{r}
-mean_flower_sizes = iris %>%
+mean_flower_sizes <- iris %>%
   group_by(Species) %>%
   summarise(mean_sepal_length = mean(Sepal.Length), 
             mean_sepal_width = mean(Sepal.Width),
@@ -122,10 +123,10 @@ mean_flower_sizes = iris %>%
             )
 
 # Let's fitler mean_flower_sizes down further to only include the mean sepal length
-m_sep_len = mean_flower_sizes %>%
+m_sep_len <- mean_flower_sizes %>%
     select(c(Species, mean_sepal_length))
 
-ggplot(m_sep_len, aes(x=Species, y=mean_sepal_length, fill=Species)) + # Note to self: Add fill later
+ggplot(m_sep_len, aes(x=Species, y=mean_sepal_length)) +
   geom_col()
 
 # Pie chart
@@ -144,7 +145,7 @@ Some features of ggplot work best if the data is in a long (or so-called tidy) f
 mean_flower_sizes %>%
   pivot_longer(-Species) # -Species means all columns except Species. This is equivalent to c(mean_sepal_length, mean_sepal_width, mean_petal_length, mean_petal_width)
 
-p = mean_flower_sizes %>%
+p <- mean_flower_sizes %>%
   pivot_longer(-Species) %>% # You can pipe data directly into ggplot!
   ggplot(aes(x=name, y=value, fill=Species)) +
   geom_col(position='dodge') # Note to self: First without dodge!
@@ -153,11 +154,12 @@ p
 ```{r}
 # We can also add and change things after saving the plot to a variable:
 p + 
-  geom_hline(yintercept = 1, color="purple", linewidth = 1, linetype='dashed') + # Build this one by one for demonstration purpuses. Also save the plot to a variable and add a title later.
+  geom_hline(yintercept = 1, color="yellow", linewidth = 1, linetype='dashed') + # Build this one by one for demonstration purpuses. Also save the plot to a variable and add a title later.
   ggtitle("Size of Iris flowers") +
   theme(plot.title = element_text(size=14, face="bold", hjust=0.5)) +
-  coord_cartesian(ylim = c(0,3)) # Also demonstration purpuse.
-```
+  scale_y_continuous(trans="log10") +
+  coord_cartesian(ylim=c(-0.4,3))
+  ```
 
 **Task: Create a grouped bar chart where the groups are the species and the bars in the groups are the mean leaf lengths for that species.**
 
@@ -193,11 +195,12 @@ This is what you need to know about boxplots:
 
 ```{r}
 # Let's go back to the original dataframe and make a new long table, this time on all the measurements.
-tidy_iris = iris %>%
+tidy_iris <- iris %>%
   pivot_longer(-Species)
 
-ggplot(tidy_iris, aes(x=name, y=value, fill=Species)) + # Note to self. First without the fill!
-  geom_boxplot() #+
+tidy_iris %>%
+  ggplot(aes(x=name, y=value, fill=Species)) + # Note to self. First without the fill!
+    geom_boxplot() #+
   #coord_flip() # Demonstration purpose.
 ```
 
@@ -219,6 +222,7 @@ iris %>%
   ggplot(aes(x=Sepal.Length)) +
   geom_histogram(binwidth = 0.1) # Add binwidth later to explain histograms.
 ```
+
 Histograms put the values that you give it into bins and then display how many values are in each bin. That's essentially all there is to it! You can manipulate the resolution by changing the width of the bins either directly by setting the `binwidth` parameter, or implicitly but setting the number of `bins` with the bins parameter.
 Histograms 
 
@@ -275,7 +279,7 @@ data(PlantGrowth)
 View(PlantGrowth)
 # Results from an experiment to compare yields (as measured by dried weight of plants) obtained under a control and two different treatment conditions.
 
-PlantGrowth_wide = PlantGrowth %>%
+PlantGrowth_wide <- PlantGrowth %>%
   mutate(measurement = rep(c(1:10),3)) %>%
   pivot_wider(names_from = group, values_from = weight)
 ```
@@ -313,6 +317,7 @@ PlantGrowth %>%
   geom_boxplot() + 
   ggtitle("4.8.3 - Boxplot")
 ```
+
 ### 4.8.4 Histogram
 Plot the plant growth for the different treatments and the control (set the binwidth to 0.15).
 ```{r}
@@ -322,6 +327,7 @@ PlantGrowth %>%
   geom_histogram(position="identity", alpha=0.8, binwidth = 0.15) +
   ggtitle("4.8.4 - Histogram")
 ```
+
 ### 4.8.5 Density plot
 Plot the plant growth for the different treatments and the control (set color instead of fill and don't set an alpha):
 ```{r}
@@ -331,6 +337,7 @@ PlantGrowth %>%
   geom_density() +
   ggtitle("4.8.5 - Density plot")
 ```
+
 ### 4.8.6 Violin plot
 Plot the plant growth for the different treatments and the control (add all quartiles, no facet needed, add a `geom_point()`!)
 ```{r}
