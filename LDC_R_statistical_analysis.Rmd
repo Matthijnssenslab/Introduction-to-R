@@ -35,7 +35,6 @@ When to use?
 - You have a categorical (defines the groups) and a continuous numeric variable (measurement of interest)
 - You want to test if the mean of a population is significantly different from a specified value (one-sample t-test) or you want to test if the means of two populations are significantly different from each other (two-sample t-test)
 - Your populations are normally distributed
-- Measurements for one observation do not affect measurements for any other observation.
 
 ```{r iris}
 summary(iris)
@@ -78,7 +77,7 @@ for (i in unique(iris$Species)){
 }
 ```
 
-A second assumption that should to be fulfilled before using a t-test is that the variances of the two groups are equal. The variance tells you something about the spread in your data, so how for each number in the dataset is from the mean. The F-test is used to test for equal variances. The null hypothesis of this test is that the variances between the two groups are equal.
+A second assumption that should be fulfilled before using a t-test is that the variances of the two groups are equal. The variance tells you something about the spread in your data, so how for each number in the dataset is from the mean. The F-test is used to test for equal variances. The null hypothesis of this test is that the variances between the two groups are equal.
 ```{r}
 #Note: extract p-value separately
 #Note2: test Sepal.Length
@@ -104,6 +103,7 @@ rbind(setosa, virginica) %>%
   geom_boxplot()+
   ggpubr::stat_compare_means(method = "t.test", label.y=4.5, method.args = list(var.equal=T))
 ```
+
 One sample t-test (test if the mean is significantly different from a specified value):
 ```{r}
 t.test(setosa$Sepal.Width, mu=3, alternative = "greater")
@@ -113,7 +113,6 @@ When to use?
 
   - You have a categorical (defines the groups) and a continuous numeric variable (measurement of interest)
   - You want to test if the mean of a population is significantly different from a specified value (one-sample t-test) or you want to test if the means of two populations are significantly different from each other (two-sample t-test)
-  - Measurements for one observation do not affect measurements for any other observation.
   - Your populations are NOT normally distributed
   
 Let's test the normality of the `Petal.Width` variable for again the setosa and virginica species.
@@ -130,6 +129,7 @@ wilcox$p.value
 
 ### Comparing the means between multiple groups (ANOVA)
 When to use?
+
   - You have a categorical variable with 3 or more variables and a continuous numeric variable (measurement of interest)
   - You want to test if the mean of the populations is significantly different from each other
   - Your populations are normally distributed and there is homogeneity of variance (the variance among the groups should be approximately equal)
@@ -150,8 +150,9 @@ summary(anova)
 iris %>% 
   ggplot(aes(x=Species, y=Sepal.Width, fill=Species))+
   geom_boxplot()+
-  ggpubr::stat_compare_means(label.y=4.5)
+  ggpubr::stat_compare_means(label.y=4.5, method = "aov")
 ```
+
 When the ANOVA is statistically significant, you can proceed to test which groups are significantly different. To test which means are different across the groups, we have to perform multiple t-tests.
 Exercise: Perform a t-test for each comparison of the Sepal.Width measurement and store each p-value in a separate variable.
 ```{r}
@@ -164,6 +165,16 @@ pval1 <- setosa_versicolor$p.value
 pval2 <- setosa_virginica$p.value
 pval3 <- versicolor_virginica$p.value
 
+comp1 <- t.test(iris[iris$Species == "setosa",]$Sepal.Width,
+       iris[iris$Species=="virginica",]$Sepal.Width,)
+comp2 <- t.test(iris[iris$Species == "setosa",]$Sepal.Width,
+       iris[iris$Species=="versicolor",]$Sepal.Width,)
+comp3 <- t.test(iris[iris$Species == "virginica",]$Sepal.Width,
+       iris[iris$Species=="versicolor",]$Sepal.Width,)
+
+pval1 <- comp1$p.value
+pval2 <- comp2$p.value
+pval3 <- comp3$p.value
 
 #Solution2
 stat.test <- iris %>%
@@ -210,8 +221,9 @@ iris %>%
   ggplot(aes(x=Petal.Width, y=Petal.Length))+
   geom_point()
 ```
+
 ### Correlation test
-To calculate the correlation between two variables, we can use the `cor` function. This will output the correlation coefficient which can be from -1 to 1, with a value closer to 1 meaning that there is a strong correlation.
+To calculate the correlation between two variables, we can use the `cor` function. This will output the correlation coefficient which can go from -1 to 1, with a value closer to 1 meaning that there is a strong correlation.
 ```{r}
 cor(iris$Petal.Width, iris$Petal.Length)
 ```
