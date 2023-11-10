@@ -366,9 +366,9 @@ own pace to make sure you understand everything ;-)</p>
 <p>Have fun with R!</p>
 <p>Celes, Lander, Lisa, Mustafa and Nikolas</p>
 <div id="basics-in-r" class="section level1">
-<h1>1 Basics in R</h1>
+<h1>Basics in R</h1>
 <div id="r-data-types" class="section level2">
-<h2>1.1 R Data Types</h2>
+<h2>R Data Types</h2>
 <p>R has 5 basic data types that are :<br />
 * characters<br />
 * numerics<br />
@@ -376,7 +376,7 @@ own pace to make sure you understand everything ;-)</p>
 * complexes<br />
 * logicals</p>
 <div id="characters" class="section level3">
-<h3>1.1.1 Characters</h3>
+<h3>Characters</h3>
 <p>A character is a text (or string) value typed between single (’’) or
 double (““) quotes.</p>
 <pre class="r"><code>#To assign a value to a variable, you need to use the command: variable &lt;- value
@@ -387,7 +387,7 @@ typeof(my_character)</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 </div>
 <div id="numerics" class="section level3">
-<h3>1.1.2 Numerics</h3>
+<h3>Numerics</h3>
 <p>A numeric is a decimal value (also called double-precision real
 value).</p>
 <pre class="r"><code>my_numeric &lt;- 3.14
@@ -395,7 +395,7 @@ typeof(my_numeric)</code></pre>
 <pre><code>## [1] &quot;double&quot;</code></pre>
 </div>
 <div id="integers" class="section level3">
-<h3>1.1.3 Integers</h3>
+<h3>Integers</h3>
 <p>Integers are a subset of the numeric data type. Integers are whole
 values and are specified by the letter “L”.</p>
 <pre class="r"><code>my_integer &lt;- 24
@@ -406,14 +406,14 @@ typeof(my_integer)</code></pre>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
 </div>
 <div id="complexes" class="section level3">
-<h3>1.1.4 Complexes</h3>
+<h3>Complexes</h3>
 <p>A complex number is a value with real and imaginary parts.</p>
 <pre class="r"><code>my_complex &lt;- 2+5i
 typeof(my_complex)</code></pre>
 <pre><code>## [1] &quot;complex&quot;</code></pre>
 </div>
 <div id="logicals" class="section level3">
-<h3>1.1.5 Logicals</h3>
+<h3>Logicals</h3>
 <p>A logical is a boolean value (<em>TRUE</em> or <em>FALSE</em>). Be
 careful: Logicals are case sensitive. Writing <em>True</em> or
 <em>true</em> does not work.</p>
@@ -423,7 +423,7 @@ typeof(my_logical)</code></pre>
 </div>
 </div>
 <div id="arithmetic-with-r" class="section level2">
-<h2>1.2 Arithmetic with R</h2>
+<h2>Arithmetic with R</h2>
 <p>R can also be used as a calculator. R follows the standard order of
 priority and accepts the following operators:<br />
 Addition: <code>+</code><br />
@@ -441,13 +441,13 @@ print(x)</code></pre>
 <pre><code>## [1] 1024</code></pre>
 </div>
 <div id="r-data-structures" class="section level2">
-<h2>1.3 R Data Structures</h2>
+<h2>R Data Structures</h2>
 <p>R’s basic data structures include the vector, list, matrix, data
 frame, and factors. Some of these structures require that all members be
 of the same data type (e.g. vectors, matrices) while others permit
 multiple data types (e.g., lists, data frames).</p>
 <div id="vectors" class="section level3">
-<h3>1.3.1 Vectors</h3>
+<h3>Vectors</h3>
 <p>A vector is the simplest and most used data structure in R. It is a
 collection of data values of the same type (e.g., all numerics,
 characters, logicals…). Vectors are called often atomic vectors as they
@@ -518,7 +518,7 @@ is.na(temp)</code></pre>
 <pre><code>## [1] 43 41</code></pre>
 </div>
 <div id="matrices" class="section level3">
-<h3>1.3.2 Matrices</h3>
+<h3>Matrices</h3>
 <p>Matrices are vectors with two <em>dimensions</em>: the number of rows
 and the number of columns. The dimension attribute is itself an integer
 vector of length 2 (nrow, ncol). Matrices can hold numeric, character or
@@ -565,7 +565,7 @@ grades</code></pre>
 ## test B        15        11        17        15</code></pre>
 </div>
 <div id="factors" class="section level3">
-<h3>1.3.3 Factors</h3>
+<h3>Factors</h3>
 <p>Data often falls into a limited number of categories. For example, at
 a sport competition, athletes could get gold, silver, bronze or no
 medal. In R, categorical variables are stored in factors. Factors can be
@@ -587,7 +587,7 @@ summary(medal)</code></pre>
 ##      1      1      1      3</code></pre>
 </div>
 <div id="lists" class="section level3">
-<h3>1.3.4 Lists</h3>
+<h3>Lists</h3>
 <p>Unlike vectors, the contents of a list are not restricted to a single
 type and can encompass any mixture of data types. Lists are sometimes
 called generic vectors, because the elements of a list can by of any
@@ -614,7 +614,7 @@ can also use the “$” sign followed by the name of the component.</p>
 <pre><code>## [1] FALSE  TRUE  TRUE</code></pre>
 </div>
 <div id="data-frames" class="section level3">
-<h3>1.3.5 Data Frames</h3>
+<h3>Data Frames</h3>
 <p>You will mostly work with data frames if you want to import and
 analyze datasets in R. A data frame is a special type of list where
 every component of the list has same length. Unlike matrices, data
