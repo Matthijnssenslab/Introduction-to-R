@@ -353,21 +353,15 @@ display: none;
 </div>
 
 
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>
-Notebook. When you execute code within the notebook, the results appear
-beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within
-the chunk or by placing your cursor inside it and pressing
-<em>Cmd+Shift+Enter</em>.</p>
-<p>Store the data in the variable my_data</p>
-<pre class="r"><code>#install.packages(&quot;modeest&quot;)
+<pre class="r"><code>#install packages if you did not install them already
+#install.packages(&quot;modeest&quot;)
 #install.packages(&quot;dplyr&quot;)
 #install.packages(&quot;pastecs&quot;)
 
-
-library(modeest)
-library(pastecs)
-library(dplyr)</code></pre>
+# Load necessary libraries
+library(modeest)    # For mode calculations
+library(pastecs)    # For various statistics functions
+library(dplyr)      # For data manipulation and summarization</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:pastecs&#39;:
@@ -379,12 +373,19 @@ library(dplyr)</code></pre>
 <pre><code>## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
+<p>This code block loads the necessary R packages to use their functions
+in the script.</p>
 <p><img src /></p>
 <p>Basic view options</p>
-<p>Store the data in the variable my_data</p>
-<pre class="r"><code>my_data &lt;- iris</code></pre>
-<p>Print the first 6 rows or view all of it.</p>
-<pre class="r"><code>head(my_data, 6)</code></pre>
+<p>Here, you load the built-in “iris” dataset into the variable my_data.
+The “iris” dataset contains information about iris flowers and will be
+used for demonstrations.</p>
+<pre class="r"><code>#Load the iris dataset (this dataset is built-in)
+my_data &lt;- iris</code></pre>
+<p>This code displays the first 6 rows of your dataset using the head()
+function. It helps you get an initial look at the data.</p>
+<pre class="r"><code># Display the first 6 rows of the dataset for initial exploration
+head(my_data, 6)</code></pre>
 <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 ## 1          5.1         3.5          1.4         0.2  setosa
 ## 2          4.9         3.0          1.4         0.2  setosa
@@ -393,31 +394,41 @@ library(dplyr)</code></pre>
 ## 5          5.0         3.6          1.4         0.2  setosa
 ## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
 <pre class="r"><code>#View(my_data)</code></pre>
-<p>######Computing mean, median and mode, measures of central
-tendency######</p>
-<p>Compute the mean value for sepal length</p>
-<pre class="r"><code>mean(my_data$Sepal.Length)</code></pre>
+<div id="measures-of-central-tendency-mean-median-and-mode" class="section level2">
+<h2>Measures of Central Tendency: Mean, median and mode</h2>
+<p>The code below calculates the mean (average) value of the
+“Sepal.Length” column in your dataset. The mean is a measure of central
+tendency that represents the average value of the variable.</p>
+<pre class="r"><code># Compute the mean value for sepal length
+mean(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 5.843333</code></pre>
-<p>Compute the median value</p>
-<pre class="r"><code>median(my_data$Sepal.Length)</code></pre>
+<p>This code calculates the median value of the “Sepal.Length” column.
+The median is another measure of central tendency that represents the
+middle value when the data is sorted.</p>
+<pre class="r"><code>#Compute the median value
+median(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 5.8</code></pre>
-<p>Compute the mode, using modeest: mfv!</p>
-<pre class="r"><code>modeest::mfv(my_data$Sepal.Length)</code></pre>
+<p>This code calculates the mode of the “Sepal.Length” column using the
+modeest package. The mode is the most frequently occurring value in the
+dataset.</p>
+<pre class="r"><code># Compute the mode, using modeest: mfv!
+modeest::mfv(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 5</code></pre>
-<p>######Measures of variability#######</p>
+</div>
+<div id="measures-of-variability-range-min-max-quantiles-variance-and-standard-deviation" class="section level2">
+<h2>Measures of Variability: Range, min, max, quantiles, variance and
+standard deviation</h2>
 <p>Range: minimum &amp; maximum: Range corresponds to biggest value
 minus the smallest value. It gives you the full spread of the data.</p>
-<p>Compute the minimum value</p>
-<pre class="r"><code>min(my_data$Sepal.Length)</code></pre>
+<pre class="r"><code>#Compute the minimum, maximum value and the range
+min(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 4.3</code></pre>
-<p>Compute the maximum value</p>
 <pre class="r"><code>max(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 7.9</code></pre>
-<p>Range</p>
 <pre class="r"><code>range(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 4.3 7.9</code></pre>
-<p>#Quartiles and quantiles Recall that, quartiles divide the data into
-4 parts. Note that, the interquartile range (IQR) - corresponding to the
+<p>Quartiles and quantiles Recall that, quartiles divide the data into 4
+parts. Note that, the interquartile range (IQR) - corresponding to the
 difference between the first and third quartiles - is sometimes used as
 a robust alternative to the standard deviation. R function:</p>
 <p>quantile(x, probs = seq(0, 1, 0.25))</p>
@@ -431,11 +442,11 @@ vector of probabilities with values in [0,1].</p>
 <pre class="r"><code>quantile(my_data$Sepal.Length, seq(0, 1, 0.1))</code></pre>
 <pre><code>##   0%  10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
 ## 4.30 4.80 5.00 5.27 5.60 5.80 6.10 6.30 6.52 6.90 7.90</code></pre>
-<p>#To compute the interquartile (IQR) range: IQR means=“midspread,
+<p>To compute the interquartile (IQR) range: IQR means=“midspread,
 middle 50%”</p>
 <pre class="r"><code>IQR(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 1.3</code></pre>
-<p>#Variance and standard deviation The variance represents the average
+<p>Variance and standard deviation The variance represents the average
 squared deviation from the mean. The standard deviation is the square
 root of the variance. It measures the average deviation of the values,
 in the data, from the mean value.</p>
@@ -454,8 +465,10 @@ value.</p>
 <p>Compute the median absolute deviation</p>
 <pre class="r"><code>mad(my_data$Sepal.Length)</code></pre>
 <pre><code>## [1] 1.03782</code></pre>
-<p>######Computing an overall summary of a variable and an entire data
-frame######</p>
+</div>
+<div id="computing-an-overall-summary-of-a-variable-and-an-entire-data-frame" class="section level2">
+<h2>Computing an overall summary of a variable and an entire data
+frame</h2>
 <p>summary() function = Can be used for overall summary of dataframe or
 a variable</p>
 <p>Summary of a single variable.</p>
@@ -493,19 +506,21 @@ digit):</p>
 ##  Mean   :6     Mean   :3    Mean   :4     Mean   :1.2                  
 ##  3rd Qu.:6     3rd Qu.:3    3rd Qu.:5     3rd Qu.:1.8                  
 ##  Max.   :8     Max.   :4    Max.   :7     Max.   :2.5</code></pre>
-<p>######sapply and apply functions for calculations######</p>
+</div>
+<div id="sapply-and-apply-functions-for-calculations" class="section level2">
+<h2>sapply and apply functions for calculations</h2>
 <p>It’s also possible to use the function sapply() to apply a particular
 function over a list or vector. For instance, we can use it, to compute
 for each column in a data frame, the mean, sd, var, min, quantile, …</p>
 <p>Compute the mean of each column</p>
-<pre class="r"><code>sapply(my_data[, -5], mean)</code></pre>
+<pre class="r"><code>sapply(my_data[-5], mean)</code></pre>
 <pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
 ##     5.843333     3.057333     3.758000     1.199333</code></pre>
-<p>what is “[, -5]”? : It means drop the fifth column while doing the
+<p>What is “[-5]”? : It means drop the fifth column while doing the
 calculation. Why? Because it is not numeric, function cannot calculate
 that.</p>
 <p>Compute quartiles</p>
-<pre class="r"><code>sapply(my_data[, -5], quantile)</code></pre>
+<pre class="r"><code>sapply(my_data[-5], quantile)</code></pre>
 <pre><code>##      Sepal.Length Sepal.Width Petal.Length Petal.Width
 ## 0%            4.3         2.0         1.00         0.1
 ## 25%           5.1         2.8         1.60         0.3
@@ -527,7 +542,9 @@ column-wise, correspondingly) FUN=function</p>
 <pre class="r"><code>apply(my_data[,-5], 2, median)</code></pre>
 <pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
 ##         5.80         3.00         4.35         1.30</code></pre>
-<p>#Pipe (%&gt;%) Operator</p>
+</div>
+<div id="pipe-operator" class="section level2">
+<h2>Pipe (%&gt;%) Operator</h2>
 <p>The %&gt;% symbol in R is called the pipe operator, and it comes from
 the magrittr package, which is also imported by the dplyr package. It is
 used to pass the result of one expression as the first argument to the
@@ -540,6 +557,8 @@ need for nested function calls.</p>
 )</code></pre>
 <pre><code>##   mean_sepal_length mean_sepal_width
 ## 1             5.006            3.428</code></pre>
+<p>For example, code above is identical to code below. However, it is
+better readable.</p>
 <pre class="r"><code>library(dplyr)
 
 iris %&gt;%
@@ -550,7 +569,9 @@ iris %&gt;%
   )</code></pre>
 <pre><code>##   mean_sepal_length mean_sepal_width
 ## 1             5.006            3.428</code></pre>
-<p>#Descriptive statistics by groups######</p>
+</div>
+<div id="descriptive-statistics-by-groups" class="section level2">
+<h2>Descriptive statistics by groups</h2>
 <p>We want to group the data by Species (using group_by) and then:
 compute the number of element in each group. R function: n() compute the
 mean: R function mean() and the standard deviation: R function sd() dont
@@ -584,7 +605,9 @@ have the count of observations, the mean of Sepal.Length, and the
 standard deviation of Sepal.Length for that Species. This type of
 summary is particularly useful for understanding the distribution of
 measurements within categories of a categorical variable.</p>
-<p>#let’s try a new dataset.</p>
+</div>
+<div id="lets-try-a-new-dataset." class="section level2">
+<h2>Let’s try a new dataset.</h2>
 <pre class="r"><code>data(&quot;ToothGrowth&quot;)
 head(ToothGrowth)</code></pre>
 <pre><code>##    len supp dose
@@ -628,6 +651,7 @@ standard deviation, median, min and max?</p>
 ##   &lt;fct&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 OJ       30  20.7  6.61   22.7   8.2  30.9
 ## 2 VC       30  17.0  8.27   16.5   4.2  33.9</code></pre>
+</div>
 
 
 
