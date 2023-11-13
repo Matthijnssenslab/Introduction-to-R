@@ -1,6 +1,6 @@
 ---
-title: "R introduction Nov 2023"
-author: "Lab for Viral Metagenomcs KU Leuven"
+title: "R introduction November 2023"
+author: "Lab of Viral Metagenomics KU Leuven"
 output: 
   html_document:
     df_print: paged
@@ -1166,6 +1166,7 @@ When to use?
 summary(iris)
 ```
 
+First, we will make a dataframe of `iris` for each species separately. This will help us in the rest of the course to keep things a bit more clean.
 ```{r}
 setosa <- iris %>% 
   filter(Species=="setosa")
@@ -1178,13 +1179,14 @@ versicolor <- iris %>%
 head(versicolor)
 ```
 
-Let's first create a dataframe with only 2 iris species and visualize the width of their sepals.
+Let's then create a dataframe with only 2 iris species and visualize the width of their sepals.
 ```{r}
 rbind(setosa, virginica) %>% 
   ggplot(aes(x=Species, y=Sepal.Width, fill=Species))+
   geom_boxplot()
 ```
 
+#### Check for normal distribution (Shapiro-Wilk test)
 One of the assumptions of a t-test is that the data is normally distributed. Meaning that the data should be symmetric around the mean, showing that data near the mean are more frequent in occurrence than data far from the mean. While visualizing, the normal distribution appears as a "bell curve". 
 ```{r}
 rbind(setosa, virginica) %>% 
@@ -1193,9 +1195,8 @@ rbind(setosa, virginica) %>%
   geom_density(alpha=0.5)
 ```
 
-Apart from visually checking if the data is normally distributed, a more robust method consists of testing the normality of the distribution with a statistical test. The Shapiro-Wilk test is suited for this, this test has as null hypothesis that the data is normally distributed.
+Apart from visually checking if the data is normally distributed, a more robust method consists of testing the normality of the distribution with a statistical test. The Shapiro-Wilk test is suited for this, this test has as null hypothesis that the data is normally distributed. The for loop below tests the normality of sepal width for all species.
 ```{r}
-#Note: first calculate shapiro statistic only for setosa species, then introduce for loop
 for (i in unique(iris$Species)){
   normality_test <- shapiro.test(iris$Sepal.Width[iris$Species==i])
   print(i)
@@ -1203,19 +1204,17 @@ for (i in unique(iris$Species)){
 }
 ```
 
+#### Check for equal variance (F-test)
 A second assumption that should be fulfilled before using a t-test is that the variances of the two groups are equal. The variance tells you something about the spread in your data, so how for each number in the dataset is from the mean. The F-test is used to test for equal variances. The null hypothesis of this test is that the variances between the two groups are equal.
 ```{r}
-#Note: extract p-value separately
-#Note2: test Sepal.Length
 variance_test <- rbind(setosa, virginica) %>% 
   var.test(Sepal.Width ~ Species, data=.)
 variance_test$p.value
 ```
 
+#### Student's t-test to compare means between 2 groups
 Finally, if all assumptions are met, perform the t-test. The t-test's null hypothesis assumes that the means of the two groups are equal. If the p-value is < 0.05, the difference is statistically significant and it is very unlikely that we see this difference by chance. 
 ```{r}
-#Note: extract p-value separately
-#Note2: show t.test without equal variance
 t_test <- t.test(virginica$Sepal.Width, 
        setosa$Sepal.Width, 
        var.equal = T)
@@ -1234,6 +1233,7 @@ One sample t-test (test if the mean is significantly different from a specified 
 ```{r}
 t.test(setosa$Sepal.Width, mu=3, alternative = "greater")
 ```
+
 ### Non-parametric tests for comparing means between two groups (Wilcoxon)
 When to use?
 
@@ -1259,6 +1259,12 @@ When to use?
   - You have a categorical variable with 3 or more variables and a continuous numeric variable (measurement of interest)
   - You want to test if the mean of the populations is significantly different from each other
   - Your populations are normally distributed and there is homogeneity of variance (the variance among the groups should be approximately equal)
+  
+#### Normality and equal variance test
+  
+We tested the normality of `Sepal.Width` for all species [here](#Check for normal distribution (Shapiro-Wilk test)) and found that the sepal width of every species was normally distributed.
+
+A check for equal variances can be performed with the Bartlett or the Levene test.
 
 ```{r}
 #Normally distributed
@@ -1266,6 +1272,8 @@ bartlett.test(Sepal.Width ~ Species, data=iris)
 #Not normally distributed:
 leveneTest(Sepal.Width ~ Species, data=iris)
 ```
+
+#### ANOVA (Analysis of variances)
 One-way ANOVA compares the means between multiple groups and tells you if they are significantly different. ANOVA does not tell you which comparisons are different!
 
 ```{r}
@@ -1312,13 +1320,13 @@ stat.test <- iris %>%
 stat.test
 ```
 
-NOTE: the non-parametric equivalent for the ANOVA test is the Kruskal-Wallis test.
+**NOTE:** the non-parametric equivalent for the ANOVA test is the Kruskal-Wallis test.
 ```{r}
 kruskal.test(Petal.Width ~ Species, data=iris)
 ```
 
 ### Correction for multiple testing
-When doing multiple statistical tests, the probability to make a type I error (falsely rejecting the null hypothesis) increases. Therefore, we need to correct the p-values for multiple testing. The most simple but quite stringent correction is the Bonferroni correction. This correction divides the significance level alpha by the number of tests. 
+When perdorming multiple statistical tests, the probability to make a type I error (falsely rejecting the null hypothesis) increases. Therefore, we need to correct the p-values for multiple testing. The most simple but quite stringent correction is the Bonferroni correction. This correction divides the significance level alpha by the number of tests. 
 Another correction for multiple testing is through the false discovery rate (FDR).  The FDR is the rate that differences called significant are truly null (so in reality not different). An FDR of 5% means that, among all the differences called significant, 5% of these are truly not different. An example is the Benjamini-Hochberg FDR.
 ```{r}
 p_values <- c(pval1, pval2, pval3)
@@ -1397,7 +1405,7 @@ iris %>%
   ggpubr::stat_regline_equation(label.y=6)
 ```
 
-Exercise: Do a linear regresion analyis on the R `cars` dataset. This dataset contains data on the stopping distance of cars that are travelling at different speeds.
+**Exercise:** Perform a linear regresion analyis on the R `cars` dataset. This dataset contains data on the stopping distance of cars that are travelling at different speeds.
 ```{r}
 #Solution:
 mod <- lm(dist ~ speed, data=cars)
