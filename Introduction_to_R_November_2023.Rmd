@@ -418,7 +418,7 @@ for (s in species) {
 
 **Export a data frame**
 You can save a data frame as a .tsv (tab-separated values) file or a .csv (comma-separated values) file using the `write.table()` function.  
-```{r}
+```{r eval=FALSE}
 write.table(iris, file = "iris_R.tsv", sep = "\t", row.names = TRUE, col.names = TRUE)
 write.table(iris, file = "iris_R.csv", sep = ";", row.names = TRUE, col.names = TRUE)
 ```
