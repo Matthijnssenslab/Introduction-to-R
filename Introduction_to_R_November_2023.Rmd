@@ -668,9 +668,10 @@ compute the number of element in each group. R function: n()
 compute the mean: R function mean() and the standard deviation: R function sd()
 dont forget to ignore NA values for calculation functions mean and sd
 
-#lets use group_by, which takes our data, and groups it by species. Then, we use summarize()
+Let's use group_by, which takes our data, and groups it by species. Then, we use summarize()
 
-Quest: group_by Species, 
+Quest: group_by Species, count how many entries are present in each group (using n()), calculate mean and standard deviation.
+
 ```{r}
 group_by(my_data, Species) %>% 
   summarise(
@@ -696,7 +697,7 @@ sepal_length_table <- group_by(my_data, Species) %>%
 
 The result of this pipeline will be a new data frame where each row corresponds to a unique Species in the original my_data. Each row will have the count of observations, the mean of Sepal.Length, and the standard deviation of Sepal.Length for that Species. This type of summary is particularly useful for understanding the distribution of measurements within categories of a categorical variable.
 
-#let's try a new dataset. 
+Let's try a new dataset. 
 ```{r}
 data("ToothGrowth")
 head(ToothGrowth)
