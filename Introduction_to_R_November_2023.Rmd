@@ -32,9 +32,10 @@ setwd("~/Desktop")
 ## Installing and loading packages
 
 ```{r eval=FALSE}
-#NB:Packages are installed once but loading every session
-#YOU CLICK "Packages", "Install" and type the name of the packages
+#NB:Packages are installed once but loaded every session
+#YOU CLICK "Packages", "Install" and type the name of the package
 ## install.packages("name_of_package")
+#Example
 install.packages("tidyverse")
 library ("tidyverse") 
 
@@ -45,10 +46,10 @@ library ("tidyverse")
 ## Exercise 1
 
 ```{r}
-#Insatll and load the following packages
-"ggplot2" 
+#Insatll and load the following packages 
 "dplyr" 
 "tidyr"
+"xlsx"
 ```
 
 ## Installing Bioconductor (packages)
