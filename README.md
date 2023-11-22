@@ -7,6 +7,7 @@ We recommend that you download the [HTML_Introduction_to_R_November_2023.html](h
 
 To do this, click on the link and on the following webpage, click on the download icon at the right side of the page.
 
-![](figures/download_button.png){:height="60%" width="60%"}
+<img src="https://raw.githubusercontent.com/Matthijnssenslab/Introduction-to-R/main/figures/download_button.png" width=60%>
+
 
 Enjoy!
