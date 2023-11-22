@@ -426,7 +426,7 @@ write.table(iris, file = "iris_R.csv", sep = ";", row.names = TRUE, col.names = 
 
 **Import a dataset as a data frame**
 You can import a dataset as a data frame using the `read.table()` function.  
-```{r}
+```{r eval=FALSE}
 data <- read.table("iris_R.tsv", sep = "\t", header = TRUE)
 ```
 
@@ -809,7 +809,7 @@ iris %>%
   group_by(Species)
 ```
 
-Visually not much has changed, but we get the additional info that we now have a group with 3 members in the Species column. Following calculations will now be done separately on each group instead of the entire dataframe or column.
+Visually not much has changed, but we get the additional info that we now have a group with 3 members in the Species column (not shown in the HTML file but you should see it in the top-left corner of output in RStudio). Following calculations will now be done separately on each group instead of the entire dataframe or column.
 
 So let's pipe this into the next function: `summarise()`. This function will create a new dataframe, with columns that we can define. Since we are giving it a grouped dataframe, `summarise()` will create a row for each member of the group, i.e. for each species.
 ```{r}
@@ -865,7 +865,7 @@ p
 
 If you have stored the plot in a variable, you can also save it using the function `ggsave()`. You will have to adjust the `filename` parameter to point to a folder on your computer.
 
-```{r}
+```{r eval=FALSE}
 ggsave(filename="~/PhD/Teaching/example_plot.pdf", plot=p, width=7, height=5)
 ```
 
